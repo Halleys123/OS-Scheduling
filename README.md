@@ -1,5 +1,3 @@
-[<img src="https://img.icons8.com/?size=512&id=55494&format=png" align="right" width="25%" padding-right="350">]()
-
 # `OS-SCHEDULING`
 
 #### <code> REPLACE-ME</code>
