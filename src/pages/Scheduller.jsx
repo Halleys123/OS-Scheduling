@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
+import { DiGithubBadge } from "react-icons/di";
 
 import FCFS from "../logic/fcfs";
 import shortestRemainingTimeFirst from "../logic/srtf";
 import shortestJobFirst from "../logic/sjf";
-// import priority_preemptive from "../logic/priority_preemptive";
+import priority_preemptive from "../logic/priority_p";
 // import priority_non_preemptive from "../logic/priority_non_preemptive";
 import Process from "../logic/process";
 
@@ -13,6 +14,7 @@ import Button from "../components/UI/Button";
 import Slider from "../components/UI/Slider";
 import ProcessTable from "../components/ProcessTable";
 import HoveringBoard from "../Layout/HoveringBoard";
+import MiniIcon from "../components/UI/MiniIcons";
 
 const options = [
   {
@@ -20,38 +22,71 @@ const options = [
     label: "First Come First Serve",
     requirements: ["Arrival Time", "Burst Time"],
     id: "fcfs",
+    working: true,
   },
   {
     value: "SJF",
     label: "Shortest Job First",
     requirements: ["Arrival Time", "Burst Time"],
     id: "shortest_job_first",
+    working: false,
   },
   {
     value: "shortestRemainingTimeFirst",
     label: "Shortest Remaining Time First",
     requirements: ["Arrival Time", "Burst Time"],
     id: "shortestRemainingTimeFirst",
+    working: true,
   },
   {
     value: "Priority Preemptive",
     label: "Priority Preemptive",
     requirements: ["Arrival Time", "Burst Time", "Priority"],
     id: "priority_preemptive",
+    working: true,
   },
   {
     value: "Priority Non-Preemptive",
     label: "Priority Non-Preemptive",
     requirements: ["Arrival Time", "Burst Time", "Priority"],
     id: "priority_non_preemptive",
+    working: false,
+  },
+];
+
+const sortGantBy = [
+  {
+    value: "arrival_time",
+    label: "default",
+  },
+  {
+    value: "arrival_time",
+    label: "Arrival Time",
+  },
+  {
+    value: "burst_time",
+    label: "Burst Time",
+  },
+  {
+    value: "priority",
+    label: "Priority",
+  },
+  {
+    value: "completion_time",
+    label: "Completion Time",
+  },
+  {
+    value: "turnaround_time",
+    label: "Turnaround Time",
   },
 ];
 
 export default function Scheduller() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
+  const [selectedSortBy, setSelectedSortBy] = useState("arrival_time");
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [speed, setSpeed] = useState(0);
-  const [animationEnded, setAnimationEnded] = useState(true); // Initially, the animation is not running
+  const [animationEnded, setAnimationEnded] = useState(true);
 
   const [steps, setSteps] = useState([]);
   const [currentGanttChart, setCurrentGanttChart] = useState([]);
@@ -63,11 +98,11 @@ export default function Scheduller() {
 
   function handleSelect(selected) {
     setSelectedAlgorithm(selected);
-    setInputs({
-      "Arrival Time": "",
-      "Burst Time": "",
-      Priority: "",
-    });
+    setInputs((prev) => ({
+      "Arrival Time": prev["Arrival Time"],
+      "Burst Time": prev["Burst Time"],
+      Priority: prev.Priority,
+    }));
   }
 
   useEffect(() => {
@@ -89,7 +124,9 @@ export default function Scheduller() {
           }
 
           setCurrentGanttChart(
-            steps[nextIndex].filter((p) => p.arrival_time <= nextIndex)
+            steps[nextIndex]
+              .filter((p) => p.arrival_time <= nextIndex)
+              .sort((a, b) => a[selectedSortBy] - b[selectedSortBy])
           );
 
           return nextIndex;
@@ -98,7 +135,7 @@ export default function Scheduller() {
     }
 
     return () => clearInterval(interval);
-  }, [speed, steps]);
+  }, [speed, steps, selectedSortBy]);
 
   return (
     <div className="h-full w-full flex flex-row gap-8 relative">
@@ -107,8 +144,9 @@ export default function Scheduller() {
         <Dropdown_Label
           placeholder="Select an Algorithm"
           onSelect={handleSelect}
-          options={options}
+          options={options.filter((o) => o.working)}
           label="Select Algorithm"
+          disabled={!animationEnded}
         />
         {selectedAlgorithm ? (
           options
@@ -161,7 +199,6 @@ export default function Scheduller() {
                   parseInt(priority_array[index] ?? 1)
                 );
               });
-
               if (selectedAlgorithm === "firstComeFirstServe") {
                 const fcfs = new FCFS();
                 processes.forEach((process) => fcfs.addProcess(process));
@@ -169,7 +206,9 @@ export default function Scheduller() {
                 const steps = fcfs.getSteps();
                 console.log(steps);
                 setSteps(steps);
-                setCurrentGanttChart(steps[0]);
+                setCurrentGanttChart(
+                  steps[0].sort((a, b) => a[selectedSortBy] - b[selectedSortBy])
+                );
                 setAnimationEnded(false);
               } else if (selectedAlgorithm === "shortestRemainingTimeFirst") {
                 const sjf = new shortestRemainingTimeFirst();
@@ -178,7 +217,9 @@ export default function Scheduller() {
                 const steps = sjf.getSteps();
                 console.log(steps);
                 setSteps(steps);
-                setCurrentGanttChart(steps[0]);
+                setCurrentGanttChart(
+                  steps[0].sort((a, b) => a[selectedSortBy] - b[selectedSortBy])
+                );
                 setAnimationEnded(false);
               } else if (selectedAlgorithm === "SJF") {
                 const sjf = new shortestJobFirst();
@@ -187,7 +228,20 @@ export default function Scheduller() {
                 const steps = sjf.getSteps();
                 console.log(steps);
                 setSteps(steps);
-                setCurrentGanttChart(steps[0]);
+                setCurrentGanttChart(
+                  steps[0].sort((a, b) => a[selectedSortBy] - b[selectedSortBy])
+                );
+                setAnimationEnded(false);
+              } else if (selectedAlgorithm === "Priority Preemptive") {
+                const priority = new priority_preemptive();
+                processes.forEach((process) => priority.addProcess(process));
+                priority.schedule();
+                const steps = priority.getSteps();
+                console.log(steps);
+                setSteps(steps);
+                setCurrentGanttChart(
+                  steps[0].sort((a, b) => a[selectedSortBy] - b[selectedSortBy])
+                );
                 setAnimationEnded(false);
               }
             } else {
@@ -224,15 +278,29 @@ export default function Scheduller() {
             priority: inputs.Priority,
             selectedAlgorithm,
           }) && (
-            <div className="flex flex-col self-stretch">
-              <Slider
-                label="Speed Control"
-                value={speed}
-                setValue={setSpeed}
-                className="self-stretch"
+            <>
+              <div className="flex flex-col self-stretch">
+                <Slider
+                  label="Speed Control"
+                  value={speed}
+                  setValue={setSpeed}
+                  className="self-stretch"
+                />
+              </div>
+              <Dropdown_Label
+                label="Sort Gantt Chart By"
+                onSelect={setSelectedSortBy}
+                options={sortGantBy}
               />
-            </div>
+            </>
           )}
+        <div className="flex flex-row self-stretch justify-between mt-auto px-2">
+          <MiniIcon
+            label="Contribute"
+            href="https://github.com/Halleys123/OS-Scheduling"
+            icon={<DiGithubBadge size={24} />}
+          />
+        </div>
       </HoveringBoard>
       <HoveringBoard className="flex-1 h-full p-4 overflow-y-scroll">
         <div className="flex flex-row self-stretch justify-between items-center">
