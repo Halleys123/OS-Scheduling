@@ -1,5 +1,4 @@
 import base from "./parent.js";
-import Process from "./process.js";
 
 class priorityPreemptive extends base {
   constructor() {
@@ -9,16 +8,9 @@ class priorityPreemptive extends base {
     const processes = this.processes;
     processes.sort((a, b) => a.priority - b.priority);
 
-    let currentProcessIndex = 0;
-
     while (processes.some((p) => p.remaining_time > 0)) {
-      const currentProcess = processes.find((p, index) => {
-        if (
-          index >= currentProcessIndex &&
-          p.arrival_time <= this.time &&
-          p.remaining_time > 0
-        ) {
-          currentProcessIndex = index;
+      const currentProcess = processes.find((p) => {
+        if (p.arrival_time <= this.time && p.remaining_time > 0) {
           return true;
         }
         return false;

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
+
 import { DiGithubBadge } from "react-icons/di";
+import { AiFillLinkedin } from "react-icons/ai";
 
 import FCFS from "../logic/fcfs";
 import shortestRemainingTimeFirst from "../logic/srtf";
 import shortestJobFirst from "../logic/sjf";
 import priority_preemptive from "../logic/priority_p";
 // import priority_non_preemptive from "../logic/priority_non_preemptive";
-import Process from "../logic/process";
+import Process from "../logic/Process";
 
 import Dropdown_Label from "../components/UI/Dropdown/Dropdown_Label";
 import Input_Label from "../components/UI/Input/Input_Label";
@@ -110,7 +112,7 @@ export default function Scheduller() {
 
     let interval;
 
-    if (speed !== 0) {
+    if (speed !== 0 && !animationEnded) {
       setAnimationEnded(false);
 
       interval = setInterval(() => {
@@ -135,11 +137,11 @@ export default function Scheduller() {
     }
 
     return () => clearInterval(interval);
-  }, [speed, steps, selectedSortBy]);
+  }, [speed, steps, selectedSortBy, animationEnded]);
 
   return (
     <div className="h-full w-full flex flex-row gap-8 relative">
-      <HoveringBoard className="w-1/4 h-full p-4 flex flex-col gap-4">
+      <HoveringBoard className="w-1/4 h-full p-4 flex flex-col gap-4 overflow-y-scroll overflow-x-hidden">
         <span className="text-lg font-bold">Process Input</span>
         <Dropdown_Label
           placeholder="Select an Algorithm"
@@ -294,11 +296,16 @@ export default function Scheduller() {
               />
             </>
           )}
-        <div className="flex flex-row self-stretch justify-between mt-auto px-2">
+        <div className="flex flex-row self-stretch gap-6 mt-auto px-2 pt-12">
           <MiniIcon
             label="Contribute"
             href="https://github.com/Halleys123/OS-Scheduling"
             icon={<DiGithubBadge size={24} />}
+          />
+          <MiniIcon
+            label="LinkedIn"
+            href="https://www.linkedin.com/in/arnav-chhabra-51072316b/"
+            icon={<AiFillLinkedin size={24} />}
           />
         </div>
       </HoveringBoard>

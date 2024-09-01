@@ -32,7 +32,7 @@ function Dropdown({
 
   return (
     <div className={`relative ${className}`} name={placeholder}>
-      <Tooltip content={placeholder} position="right">
+      <Tooltip content={placeholder} position="top">
         <button
           className={`w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-3 py-2 text-sm text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${
             disabled ? "opacity-50 cursor-not-allowed" : ""
@@ -61,33 +61,34 @@ function Dropdown({
       </Tooltip>
 
       {isOpen && (
-        <ul className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-44 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+        <ul className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-44 p-1 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
           {options.map((option) => (
-            <li
-              key={option.value}
-              className={`text-gray-900 cursor-pointer select-none relative py-2 pl-3 pr-9 hover:bg-indigo-600 hover:text-white ${
-                selected === option.value ? "font-semibold" : "font-normal"
-              }`}
-              onClick={() => handleSelect(option.value)}
-            >
-              <span className="block truncate">{option.label}</span>
-              {selected === option.value && (
-                <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
-                  <svg
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M16.707 5.293a1 1 0 00-1.414 0L10 10.586 6.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l6-6a1 1 0 000-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              )}
-            </li>
+            <ul key={option.value}>
+              <button
+                className={`text-gray-900 cursor-pointer select-none relative flex flex-row h-8 rounded-sm items-center pl-3 hover:bg-indigo-600 w-full hover:text-white focus-within:bg-purple-50 ${
+                  selected === option.value ? "font-semibold" : "font-normal"
+                }`}
+                onClick={() => handleSelect(option.value)}
+              >
+                <span className="block truncate">{option.label}</span>
+                {selected === option.value && (
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
+                    <svg
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 00-1.414 0L10 10.586 6.707 7.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l6-6a1 1 0 000-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                )}
+              </button>
+            </ul>
           ))}
         </ul>
       )}
