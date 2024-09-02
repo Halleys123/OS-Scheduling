@@ -32,33 +32,32 @@ function Dropdown({
 
   return (
     <div className={`relative ${className}`} name={placeholder}>
-      <Tooltip content={placeholder} position="top">
-        <button
-          className={`w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-3 py-2 text-sm text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${
-            disabled ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          disabled={disabled}
-        >
-          {selected
-            ? options.find((option) => option.value === selected).label
-            : placeholder}
-          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-            <svg
-              className="h-5 w-5 text-gray-400"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M5.293 7.707a1 1 0 011.414 0L10 11l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </span>
-        </button>
-      </Tooltip>
+      <button
+        title={placeholder}
+        className={`w-full bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-3 py-2 text-sm text-left cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 ${
+          disabled ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        disabled={disabled}
+      >
+        {selected
+          ? options.find((option) => option.value === selected).label
+          : placeholder}
+        <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+          <svg
+            className="h-5 w-5 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.293 7.707a1 1 0 011.414 0L10 11l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </span>
+      </button>
 
       {isOpen && (
         <ul className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-44 p-1 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
