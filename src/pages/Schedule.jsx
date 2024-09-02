@@ -5,7 +5,7 @@ import ProcessAnimationViewer from "./schedule/ProcessAnimationView";
 
 export default function Scheduller() {
   return (
-    <div className="h-full w-full flex flex-row gap-8 relative">
+    <div className="md:h-full w-full flex flex-col md:flex-row gap-8 relative">
       <SchedulerProvider>
         <Controls />
         <ProcessAnimationViewer />

@@ -7,7 +7,7 @@ const Schedule = lazy(() => import("./pages/Schedule"));
 
 function App() {
   return (
-    <div className="w-screen h-screen overflow-hidden p-8 bg-slate-50">
+    <div className="w-screen h-screen overflow-y-scroll overflow-x-hidden md:overflow-hidden p-4 md:p-8 bg-slate-50">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Schedule />} />

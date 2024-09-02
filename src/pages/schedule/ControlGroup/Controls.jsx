@@ -78,7 +78,7 @@ export default function Controls() {
   ]);
 
   return (
-    <HoveringBoard className="w-1/4 h-full p-4 flex flex-col gap-4 overflow-y-scroll overflow-x-hidden">
+    <HoveringBoard className="lg:w-1/4 sm:min-h-64 flex-1 md:flex-grow-0 md:flex-shrink-0 md:basis-auto md:h-full p-4 flex flex-col gap-4 overflow-y-scroll overflow-x-hidden">
       <div className="flex flex-col flex-1 gap-4">
         <span className="text-lg font-bold">Process Input</span>
         <Dropdown_Label

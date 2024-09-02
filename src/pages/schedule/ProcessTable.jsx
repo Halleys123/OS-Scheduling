@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import ProcessDetailsCard from "./ProcessCard";
 
 ProcessTable.propTypes = {
   processes: PropTypes.array.isRequired,
@@ -62,10 +63,10 @@ function ProcessTable({ processes, currentTime = 3 }) {
     }
   }, [sortby, processes]);
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+    <div className="overflow-x-visible md:overflow-x-auto">
+      <table className="hidden md:block min-w-full bg-white border border-gray-200 rounded-lg">
         <thead>
-          <tr className="text-sm text-stone-500 font-sans bg-stone-50">
+          <tr className="text-xs md:text-sm text-stone-500 font-sans bg-stone-50">
             <th
               className="px-4 py-2"
               onClick={() => {
@@ -98,7 +99,7 @@ function ProcessTable({ processes, currentTime = 3 }) {
             <th className="px-4 py-2">Turnaround Time</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="text-sm md:text-base font-sans">
           {process_temp
             .filter((process) => process.arrival_time <= currentTime)
             .map((process) => {
@@ -129,6 +130,11 @@ function ProcessTable({ processes, currentTime = 3 }) {
             })}
         </tbody>
       </table>
+      <div className="flex md:hidden flex-col gap-4">
+        {process_temp.map((process, index) => {
+          return <ProcessDetailsCard key={index} process={process} />;
+        })}
+      </div>
     </div>
   );
 }
