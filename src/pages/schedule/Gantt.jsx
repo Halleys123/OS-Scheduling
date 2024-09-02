@@ -11,9 +11,17 @@ export default function Gantt({ currentGanttChart = [] }) {
       <div className="flex flex-row">
         {currentGanttChart.map((process, index) => (
           <div
-            className={`h-12 w-12 border border-1 border-stone-300 flex items-center justify-center ${
+            className={`h-12 w-12 border-stone-300 flex items-center justify-center ${
               process.remaining_time == 0 ? "bg-green-200" : "bg-stone-50"
-            }`}
+            }
+            ${
+              currentGanttChart.length == 1
+                ? "border"
+                : index != currentGanttChart.length - 1
+                ? "border-t-[1px] border-b-[1px] border-l-[1px]"
+                : "border-[1px]"
+            }
+            `}
             key={`${process.id}-${index}`}
           >
             {process.id}
